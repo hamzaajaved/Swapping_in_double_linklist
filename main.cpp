@@ -10,6 +10,7 @@ struct Node {
 void insert(int val);
 void search(int val);
 void deleteNode(int val);
+void swap(int x,int y);
 void print();
 
 struct Node * start = NULL;
@@ -28,10 +29,16 @@ int main(int argc, char const * argv[]) {
   search(40);
   search(50);
   search(100);
-  deleteNode(10);
-  deleteNode(20);
-  deleteNode(30);
   print();
+  cout << "After Swapping" << endl;
+  // swap(10,20);
+  // swap(20,30);
+  swap(40,50);
+  // swap(10,30);
+  // swap(10,50);
+  
+  print();
+  
   system("pause");
   return 0;
 }
@@ -104,6 +111,80 @@ void deleteNode(int val){
       } 
     }
   }
+}
+
+void swap(int x,int y){
+  // Search for X and Y
+  struct Node *prevX = NULL;
+  struct Node *currX = start;
+  while(currX->value != x){
+    prevX = currX;
+    currX = currX->next; 
+  }
+
+  struct Node *prevY = NULL;
+  struct Node *currY = start;
+  while(currY->value != y){
+    prevY = currY;
+    currY = currY->next;
+  }
+
+  // Now We Will Swap Nodes
+  struct Node *tempY = currY->next;
+  if(currX->next == currY){
+    // When Two Consecutive Nodes
+    if(prevX == NULL){
+        currY->prev = NULL;
+    }else{
+        currY->prev = prevX;
+    }
+
+    if(tempY == NULL){
+        currX->next = NULL;
+    }else{
+        currX->next = tempY;
+        tempY->prev = currX;
+    }
+        currY->next = currX;
+        currX->prev = currY;
+
+        if(prevX != NULL){
+        prevX->next = currY;
+        }else{
+        start = currY;
+        }
+    
+  }else{
+      struct Node *tempX = currX->next;
+      if(tempY == NULL){
+        // When Node is stard and end
+        currY->next = currX->next;
+        currX->next = NULL;
+        currY->prev = NULL;
+        tempX->prev = currY;
+      }else{
+        // When Node is start,internal or End
+        currY->next = currX->next;
+        currX->next = tempY;
+        tempY->prev = currX;
+        tempX->prev = currY;
+      }
+
+      // Now we will set our start Node
+      if(prevX != NULL){
+        prevX->next = currY;
+      }else{
+        start = currY;
+      }
+      
+      if(prevY != NULL){
+        prevY->next = currX;
+      }else{
+        start = currX;
+      }
+  }
+
+
 }
 
 void print() {
